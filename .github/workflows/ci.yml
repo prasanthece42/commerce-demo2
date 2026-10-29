@@ -1,0 +1,22 @@
+name: Aegis CI
+
+on:
+  pull_request:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: aegis-ci-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    uses: prasanthece42/aegis-platform/.github/workflows/python-stack-ci.yml@64f73a3430cd16a79caae09a4acbe65bf6acc392
+    with:
+      app-id: commerce-demo2
+      platforms: '["amd64","arm64"]'
