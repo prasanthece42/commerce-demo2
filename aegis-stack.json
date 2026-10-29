@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "profile_id": "python312-multiservice",
+  "primary_service": "catalog",
+  "services": {
+    "catalog": {
+      "context": ".",
+      "dockerfile": "Dockerfile",
+      "build_args": {
+        "SERVICE": "catalog"
+      },
+      "port": 8000,
+      "health_path": "/ready",
+      "replicas": 1,
+      "env": {
+        "SERVICE_NAME": "catalog",
+        "DB_POOL_SIZE": "8",
+        "HTTP_TIMEOUT_SECONDS": "5",
+        "CACHE_TTL_SECONDS": "30"
+      },
+      "service_env": {},
+      "secret_env": {
+        "DATABASE_URL": "database-url",
+        "REDIS_URL": "redis-url"
+      }
+    },
+    "inventory": {
+      "context": ".",
+      "dockerfile": "Dockerfile",
+      "build_args": {
+        "SERVICE": "inventory"
+      },
+      "port": 8000,
+      "health_path": "/ready",
+      "replicas": 1,
+      "env": {
+        "SERVICE_NAME": "inventory",
+        "DB_POOL_SIZE": "8",
+        "HTTP_TIMEOUT_SECONDS": "5"
+      },
+      "service_env": {},
+      "secret_env": {
+        "DATABASE_URL": "database-url"
+      }
+    },
+    "cart": {
+      "context": ".",
+      "dockerfile": "Dockerfile",
+      "build_args": {
+        "SERVICE": "cart"
+      },
+      "port": 8000,
+      "health_path": "/ready",
+      "replicas": 1,
+      "env": {
+        "SERVICE_NAME": "cart",
+        "DB_POOL_SIZE": "8",
+        "HTTP_TIMEOUT_SECONDS": "5",
+        "CART_TTL_SECONDS": "3600"
+      },
+      "service_env": {
+        "CATALOG_URL": "catalog"
+      },
+      "secret_env": {
+        "REDIS_URL": "redis-url"
+      }
+    },
+    "orders": {
+      "context": ".",
+      "dockerfile": "Dockerfile",
+      "build_args": {
+        "SERVICE": "orders"
+      },
+      "port": 8000,
+      "health_path": "/ready",
+      "replicas": 2,
+      "env": {
+        "SERVICE_NAME": "orders",
+        "DB_POOL_SIZE": "8",
+        "HTTP_TIMEOUT_SECONDS": "5"
+      },
+      "service_env": {
+        "CATALOG_URL": "catalog",
+        "INVENTORY_URL": "inventory",
+        "CART_URL": "cart",
+        "PAYMENTS_URL": "payments",
+        "NOTIFICATIONS_URL": "notifications"
+      },
+      "secret_env": {
+        "DATABASE_URL": "database-url"
+      }
+    },
+    "payments": {
+      "context": ".",
+      "dockerfile": "Dockerfile",
+      "build_args": {
+        "SERVICE": "payments"
+      },
+      "port": 8000,
+      "health_path": "/ready",
+      "replicas": 1,
+      "env": {
+        "SERVICE_NAME": "payments",
+        "DB_POOL_SIZE": "8",
+        "HTTP_TIMEOUT_SECONDS": "5"
+      },
+      "service_env": {},
+      "secret_env": {
+        "DATABASE_URL": "database-url"
+      }
+    },
+    "notifications": {
+      "context": ".",
+      "dockerfile": "Dockerfile",
+      "build_args": {
+        "SERVICE": "notifications"
+      },
+      "port": 8000,
+      "health_path": "/ready",
+      "replicas": 1,
+      "env": {
+        "SERVICE_NAME": "notifications",
+        "DB_POOL_SIZE": "8",
+        "HTTP_TIMEOUT_SECONDS": "5"
+      },
+      "service_env": {},
+      "secret_env": {
+        "DATABASE_URL": "database-url"
+      }
+    }
+  },
+  "dependencies": "postgres17-redis7-nginx"
+}

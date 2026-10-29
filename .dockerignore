@@ -1,0 +1,8 @@
+.local
+.git
+__pycache__
+tests
+scripts
+README.md
+.env
+.env.*
