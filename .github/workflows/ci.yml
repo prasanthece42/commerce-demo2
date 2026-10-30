@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   validate:
-    uses: prasanthece42/aegis-platform/.github/workflows/python-stack-ci.yml@64f73a3430cd16a79caae09a4acbe65bf6acc392
+    uses: prasanthece42/aegis-platform/.github/workflows/python-stack-ci.yml@67e8f8bedcdbc69973b2191397f9c63fcfe4f6a8
     with:
       app-id: commerce-demo2
       platforms: '["amd64","arm64"]'
